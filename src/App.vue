@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+    <v-header :seller="seller"></v-header>
     <div class="tab border-1px">
       <router-link tag="div" to="/goods" class="tab-item">商品</router-link>
       <router-link tag="div" to="/ratings" class="tab-item">评论</router-link>
@@ -12,10 +12,27 @@
 
 <script>
 import Header from '@/components/header/Header'
+// 状态码常量
+const STATUS_OK = 'OK'
+
 export default {
   name: 'App',
+  data () {
+    return {
+      seller: {}
+    }
+  },
   components: {
     'v-header': Header
+  },
+  created () {
+    this.axios.get('/api/data.json').then((res) => {
+      if (res.statusText === STATUS_OK) {
+        const data = res.data
+        // console.log(data)
+        this.seller = data.seller
+      }
+    })
   }
 }
 </script>
