@@ -3,6 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+// import '@/common/styles/reset.css'
+// import '@/common/styles/iconfont.css'
+// 统一引用公共样式
+import '@/common/styles/index.styl'
 
 Vue.config.productionTip = false
 

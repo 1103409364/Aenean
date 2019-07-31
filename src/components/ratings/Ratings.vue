@@ -1,21 +1,20 @@
 <template>
-  <div>
-    header
+  <div class="ratings">
+    ratings
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Header',
+  name: 'Ratings',
   data () {
     return {
-      msg: ''
+
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped>
 
 </style>
