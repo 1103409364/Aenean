@@ -26,11 +26,11 @@ export default {
     'v-header': Header
   },
   created () {
-    this.axios.get('/api/data.json').then((res) => {
+    this.axios.get('/api/seller').then((res) => {
       if (res.statusText === STATUS_OK) {
-        const data = res.data
-        // console.log(data)
-        this.seller = data.seller
+        const result = res.data
+        // console.log(result.data)
+        this.seller = result.data
       }
     })
   }
