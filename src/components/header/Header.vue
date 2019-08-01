@@ -244,7 +244,7 @@ export default {
       // 弹出层渐变动画
       &.fade-enter,
       &.fade-leave-to
-        opacity: 0 // class被移除时,从0到1
+        opacity: 0 // class移除,从 0 到 1,加上class 从 1 到 0
       &.fade-enter-active,
       &.fade-leave-active //过程中都有这个class,在这里加过渡
         transition: opacity .3s
