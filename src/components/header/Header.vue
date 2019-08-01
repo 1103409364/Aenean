@@ -4,6 +4,7 @@
       <div class="avatar">
         <img width="64" height="64" :src="seller.avatar" alt="avatar">
       </div>
+
       <div class="content">
         <div class="title">
           <span class="brand"></span>
@@ -20,27 +21,49 @@
         </div>
       </div>
 
-      <div v-if="seller.supports" class="support-content">
+      <div v-if="seller.supports" class="support-content" @click="showDetail">
         <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
 
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail">
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
-
     <div class="background" :style="styleObj"/>
+    <div v-show="detailShow" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-main">
+          <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :size="48" :score="seller.score"></star>
+          </div>
+        </div>
+      </div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import star from '@/components/star/Star'
+
 export default {
   name: 'Header',
   props: {
     seller: {
       type: Object
+    }
+  },
+  components: {
+    star
+  },
+  data () {
+    return {
+      detailShow: false
     }
   },
   // 监听 props 变化,更新样式
@@ -52,6 +75,11 @@ export default {
         'background-size': 'cover',
         'background-position': 'center center'
       }
+    }
+  },
+  methods: {
+    showDetail () {
+      this.detailShow = true
     }
   },
   created () {
@@ -69,6 +97,7 @@ export default {
 
   .header
     position relative
+    overflow hidden
     color #fff
     background-color rgba(7, 17, 27, 0.5)
     .content-wrapper
@@ -177,4 +206,32 @@ export default {
         overflow hidden
         z-index -1
         filter blur(5px)
+    .detail
+      position fixed
+      top 0
+      left 0
+      z-index 100
+      width 100%
+      height 100%
+      overflow auto
+      background: rgba(7, 17, 27, 0.8)
+      .detail-wrapper
+        width 100%
+        min-height 100%
+        box-sizing border-box
+        .detail-main
+          padding-top 64px
+          padding-bottom 64px
+          .name
+            line-height 16px
+            text-align center
+            font-sizt 16px
+            font-weight 700
+      .detail-close
+        position relative
+        width 32px
+        height 32px
+        margin -64px auto 0 auto
+        font-size 32px
+        clear both
 </style>

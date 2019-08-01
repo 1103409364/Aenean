@@ -10,8 +10,9 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: Goods
+      // 首页默认显示商品页
+      redirect: '/goods',
+      name: 'Home'
     },
     {
       path: '/goods',
