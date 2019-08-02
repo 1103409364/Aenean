@@ -89,12 +89,12 @@ export default {
       this.foodsScroll.on('scroll', (pos) => {
         // 滚动值是负数转为绝对值
         this.scrollY = Math.abs(Math.round(pos.y))
-        // 屏幕高度小于 menu 的时候，menu 被遮挡
-        // if (this.scrollY > this.listHeight[this.listHeight.length - 2]) {
-        //   this.menuScroll.scrollTo(0, -56)
-        // } else {
-        //   this.menuScroll.scrollTo(0, 0)
-        // }
+        // 屏幕高度小于 menu 的时候,menu 被遮挡,滚到最后让菜单往下滚一点
+        if (this.scrollY > this.listHeight[this.listHeight.length - 2]) {
+          this.menuScroll.scrollTo(0, -30)
+        } else {
+          this.menuScroll.scrollTo(0, 0)
+        }
       })
     },
     // 计算列表高度
