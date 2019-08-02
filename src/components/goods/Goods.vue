@@ -34,13 +34,20 @@
                   <span class="now">￥{{food.price}}</span>
                   <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart
+      :delivery-price="seller.deliveryPrice"
+      :min-price="seller.minPrice"
+      :select-foods="selectFoods"
+    ></shopcart>
   </div>
 </template>
 
@@ -48,6 +55,7 @@
 import BScroll from 'better-scroll'
 import Icon from '@/components/icon/Icon'
 import Shopcart from '@/components/shopcart/Shopcart'
+import Cartcontrol from '@/components/cartcontrol/Cartcontrol'
 
 const STATUS_OK = 'OK'
 
@@ -60,7 +68,8 @@ export default {
   },
   components: {
     Icon,
-    Shopcart
+    Shopcart,
+    Cartcontrol
   },
   data () {
     return {
@@ -79,6 +88,18 @@ export default {
           return index
         }
       }
+    },
+    // 被选实物,有 count 说明被选了,count 有 cartControl 组件添加,得到被选择的 foods 数组传给购物车
+    selectFoods () {
+      let foods = []
+      this.goods.forEach(good => {
+        good.foods.forEach(food => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   methods: {
@@ -88,7 +109,8 @@ export default {
         click: true
       })
       this.foodsScroll = new BScroll(this.$refs['foods-wrapper'], {
-        probeType: 3
+        probeType: 3,
+        click: true
       })
       this.foodsScroll.on('scroll', (pos) => {
         // 滚动值是负数转为绝对值
@@ -233,4 +255,8 @@ export default {
               text-decoration line-through
               font-size 10px
               color rgb(147, 153, 159)
+          .cartcontrol-wrapper
+            position absolute
+            right 0
+            bottom 12px
 </style>
