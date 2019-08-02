@@ -40,12 +40,15 @@
         </li>
       </ul>
     </div>
+    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script>
 import BScroll from 'better-scroll'
 import Icon from '@/components/icon/Icon'
+import Shopcart from '@/components/shopcart/Shopcart'
+
 const STATUS_OK = 'OK'
 
 export default {
@@ -56,7 +59,8 @@ export default {
     }
   },
   components: {
-    Icon
+    Icon,
+    Shopcart
   },
   data () {
     return {

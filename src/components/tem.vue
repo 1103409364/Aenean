@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// import homeHeader from './header/Header'
 
 export default {
   name: 'Home',
