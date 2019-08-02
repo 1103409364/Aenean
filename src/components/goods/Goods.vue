@@ -1,17 +1,23 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menu-wrapper">
       <ul>
-        <li v-for="item in goods" :key="item.name" class="menu-item">
+        <li
+          v-for="(item, index) in goods"
+          :key="item.name"
+          class="menu-item"
+          :class="calCurrentClass(index)"
+          @click="selectMenu(index)"
+        >
           <span class="text border-1px">
             <icon v-show="item.type > 0" class="icon" size="3" :type="item.type"></icon>{{item.name}}
           </span>
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foods-wrapper">
       <ul>
-        <li v-for="item in goods" class="food-list" :key="item.name">
+        <li v-for="item in goods" class="food-list" :key="item.name" ref="food-list">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="food in item.foods" class="food-item boder-1px" :key="food.name">
@@ -22,8 +28,7 @@
                 <h2 class="name">{{food.name}}</h2>
                 <p class="desc">{{food.description}}</p>
                 <div class="extra">
-                  <span class="count">月售{{food.sellCount}}</span>
-                  <span>好评率{{food.rating}}%</span>
+                  <span class="count">月售{{food.sellCount}}</span><span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
                   <span class="now">￥{{food.price}}</span>
@@ -39,6 +44,7 @@
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import Icon from '@/components/icon/Icon'
 const STATUS_OK = 'OK'
 
@@ -54,7 +60,62 @@ export default {
   },
   data () {
     return {
-      goods: []
+      goods: [],
+      listHeight: [],
+      scrollY: 0
+    }
+  },
+  computed: {
+    currentIndex () {
+      for (let index = 0; index < this.listHeight.length; index++) {
+        let h1 = this.listHeight[index]
+        let h2 = this.listHeight[index + 1]
+        // h1 是最后一项的时候，h2为 undefined
+        if (!h2 || (this.scrollY >= h1 && this.scrollY < h2)) {
+          return index
+        }
+      }
+    }
+  },
+  methods: {
+    // 初始化 better-scroll
+    _initScroll () {
+      this.menuScroll = new BScroll(this.$refs['menu-wrapper'], {
+        click: true
+      })
+      this.foodsScroll = new BScroll(this.$refs['foods-wrapper'], {
+        probeType: 3
+      })
+      this.foodsScroll.on('scroll', (pos) => {
+        // 滚动值是负数转为绝对值
+        this.scrollY = Math.abs(Math.round(pos.y))
+        // 屏幕高度小于 menu 的时候，menu 被遮挡
+        // if (this.scrollY > this.listHeight[this.listHeight.length - 2]) {
+        //   this.menuScroll.scrollTo(0, -56)
+        // } else {
+        //   this.menuScroll.scrollTo(0, 0)
+        // }
+      })
+    },
+    // 计算列表高度
+    _calcHeight () {
+      let foodList = this.$refs['food-list']
+      let height = 0
+      this.listHeight.push(height)
+      for (let item of foodList) {
+        height += item.clientHeight
+        this.listHeight.push(height)
+      }
+    },
+    // 计算当前是否是 'current'
+    calCurrentClass (index) {
+      return this.currentIndex === index ? 'current' : ''
+    },
+    selectMenu (index) {
+      let foodList = this.$refs['food-list']
+      let el = foodList[index]
+      // better-scroll 的api 可以滚动到指定的 dom
+      this.foodsScroll.scrollToElement(el, 300)
     }
   },
   created () {
@@ -62,6 +123,12 @@ export default {
       if (res.statusText === STATUS_OK) {
         const result = res.data
         this.goods = result.data
+        // 在 nextTick 之后 DOM 更新，在这之后做 DOM 相关操作
+        this.$nextTick()
+          .then(() => {
+            this._initScroll()
+            this._calcHeight()
+          })
       } else {
         console.log(res.statusText)
       }
@@ -85,13 +152,20 @@ export default {
       height 100%
       background-color #f3f5f7
       .menu-item
-        display inline-block
-        vertical-align top
         display table
-        margin 0 auto
         height 54px
         width 56px
+        padding 0 12px
         line-height 14px
+        &.current
+          position relative
+          z-index 10
+          // 盖住 border
+          margin-top -1
+          background-color #fff
+          font-weight 700
+          .text
+            border-none()
       .icon
         margin-right 2px
         width 12px
@@ -140,9 +214,10 @@ export default {
             color rgb(147, 153, 159)
           .desc
             margin-bottom 8px
+            line-height 14px
           .extra
             .count
-              margin-right 2px
+              margin-right 12px
           .price
             font-weight 700
             line-height 24px
