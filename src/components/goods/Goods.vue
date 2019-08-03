@@ -90,7 +90,7 @@ export default {
         }
       }
     },
-    // 被选实物,有 count 说明被选了,count 有 cartControl 组件添加,得到被选择的 foods 数组传给购物车
+    // 被选食物,有 count 说明被选了,count 有 cartControl 组件添加,得到被选择的 foods 数组传给购物车
     selectFoods () {
       let foods = []
       this.goods.forEach(good => {
