@@ -35,7 +35,7 @@
                   <span v-show="food.oldPrice" class="old">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" @cartAdd="handleDrop"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -47,6 +47,7 @@
       :delivery-price="seller.deliveryPrice"
       :min-price="seller.minPrice"
       :select-foods="selectFoods"
+      ref="shopcart"
     ></shopcart>
   </div>
 </template>
@@ -142,6 +143,12 @@ export default {
       let el = foodList[index]
       // better-scroll 的api 可以滚动到指定的 dom
       this.foodsScroll.scrollToElement(el, 300)
+    },
+    handleDrop (target) {
+      // nextTick 异步执行，优化性能
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(target)
+      })
     }
   },
   created () {

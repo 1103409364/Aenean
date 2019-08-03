@@ -25,15 +25,14 @@ export default {
       } else {
         this.food.count++
       }
+      // 派发事件,用于小球动画
+      this.$emit('cartAdd', event.target)
     },
     decreaseCart () {
       if (this.food.count) {
         this.food.count--
       }
     }
-  },
-  created () {
-    // console.log(this.food.name)
   }
 }
 </script>
@@ -61,5 +60,5 @@ export default {
         opacity: 0
         transform translate3d(24px, 0, 0) rotate(180deg)
       &.move-enter-active, &.move-leave-active
-        transition: all .3s ease
+        transition: all .5s ease
 </style>
