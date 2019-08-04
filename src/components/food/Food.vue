@@ -41,6 +41,25 @@
             @select="handleSelect"
             @toggle="handleToggle"
           />
+          <div class="rating-wrapper">
+            <ul v-show="food.ratings && food.ratings.length">
+              <li class="rating-item border-1px"
+                v-for="rating of food.ratings"
+                :key="rating.username"
+                v-show="needShow(rating.rateType, rating.text)"
+              >
+                <div class="user">
+                  <span class="name">{{rating.username}}</span>
+                  <img width="12" height="12" :src="rating.avatar" alt="avatar" class="avatar">
+                </div>
+                <div class="time">{{rating.rateTime | formatDate}}</div>
+                <p class="text">
+                  <i :class="{'icon-thumb_up': rating.rateType===0,'icon-thumb_down': rating.rateType===1}"></i>{{rating.text}}
+                </p>
+              </li>
+            </ul>
+            <div class="no-rating" v-show="!(food.ratings && food.ratings.length)">暂无评价</div>
+          </div>
         </div>
       </div>
     </div>
@@ -52,6 +71,8 @@ import BScroll from 'better-scroll'
 import Cartcontrol from '@/components/cartcontrol/Cartcontrol'
 import Split from '@/components/split/Split'
 import Ratingselect from '@/components/ratingselect/Ratingselect'
+import { formatDate } from '@/common/js/date'
+
 const ALL = 2
 // const POSITIVE = 0
 // const NEGATIVE = 1
@@ -115,9 +136,30 @@ export default {
     },
     handleSelect (type) {
       this.selectType = type
+      // this.$nextTick(() => {
+      //   // refresh 重新计算内容高度
+      //   this.scroll.refresh()
+      // })
     },
     handleToggle () {
       this.onlyContent = !this.onlyContent
+    },
+    // 是否显示评论
+    needShow (type, text) {
+      if (this.onlyContent && !text) {
+        return false
+      }
+      if (this.selectType === ALL) {
+        return true
+      } else {
+        return type === this.selectType
+      }
+    }
+  },
+  filters: {
+    formatDate (time) {
+      let date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   }
 }
@@ -125,6 +167,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped>
+  @import "~@/common/styles/mixin.styl"
+
   .food
     position fixed
     left 0
@@ -229,4 +273,44 @@ export default {
         margin-left 18px
         font-size 14px
         color rgb(7, 17, 27)
+      .rating-wrapper
+        padding 0 18px
+        .rating-item
+          position relative
+          padding 16px 0
+          border-1px(rgba(7, 17, 27, 0.1))
+          .user
+            position absolute
+            right 0
+            top 16px
+            line-height 12px
+            font-size 0
+            .name
+              display inline-block
+              margin-right 6px
+              vertical-align top
+              font-size 10px
+              color rgb(147, 153, 159)
+            .avatar
+              border-radius 50%
+          .time
+            margin-bottom  6px
+            line-height 12px
+            font-size 10px
+            color rgb(147, 153, 159)
+          .text
+            line-height 16px
+            font-size 12px
+            color rgb(7, 17, 27)
+            .icon-thumb_up, .icon-thumb_down
+              margin-right 4px
+              font-size 12px
+            .icon-thumb_up
+              color rgb(0, 160, 220)
+            .icon-thumb_down
+              color rgb(147, 153, 159)
+        .no-rating
+          padding 16px
+          font-size 12px
+          color rgb(147, 153, 159)
 </style>
