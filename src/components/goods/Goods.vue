@@ -1,4 +1,5 @@
 <template>
+  <!-- <div> -->
   <div class="goods">
     <div class="menu-wrapper" ref="menu-wrapper">
       <ul>
@@ -20,7 +21,7 @@
         <li v-for="item in goods" class="food-list" :key="item.name" ref="food-list">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item boder-1px" :key="food.name">
+            <li v-for="food in item.foods" class="food-item boder-1px" :key="food.name" @click="getFoodDetail(food)">
               <div class="icon">
                 <img width="57" height="57" :src="food.icon" :alt="food.name">
               </div>
@@ -48,8 +49,10 @@
       :min-price="seller.minPrice"
       :select-foods="selectFoods"
       ref="shopcart"
-    ></shopcart>
+    />
+    <food class="foodDetail" ref="foodDetail" :food="selectedFood" @cartAdd="handleDrop"></food>
   </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -57,6 +60,7 @@ import BScroll from 'better-scroll'
 import Icon from '@/components/icon/Icon'
 import Shopcart from '@/components/shopcart/Shopcart'
 import Cartcontrol from '@/components/cartcontrol/Cartcontrol'
+import Food from '@/components/food/Food'
 
 const STATUS_OK = 'OK'
 
@@ -70,13 +74,15 @@ export default {
   components: {
     Icon,
     Shopcart,
-    Cartcontrol
+    Cartcontrol,
+    Food
   },
   data () {
     return {
       goods: [],
       listHeight: [],
-      scrollY: 0
+      scrollY: 0,
+      selectedFood: {}
     }
   },
   computed: {
@@ -149,6 +155,10 @@ export default {
       this.$nextTick(() => {
         this.$refs.shopcart.drop(target)
       })
+    },
+    getFoodDetail (food) {
+      this.selectedFood = food
+      this.$refs.foodDetail.show()
     }
   },
   created () {

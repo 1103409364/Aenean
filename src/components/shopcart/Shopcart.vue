@@ -44,7 +44,7 @@
                   </span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" @cartAdd="handleDrop"></cartcontrol>
                 </div>
               </li>
             </ul>
@@ -230,6 +230,12 @@ export default {
     },
     hideCartList () {
       this.listShow = false
+    },
+    // 购物车内的增加控件加上小球动画
+    handleDrop (target) {
+      this.$nextTick(() => {
+        this.drop(target)
+      })
     },
     pay () {
       if (this.totalPrice < this.minPrice) {
