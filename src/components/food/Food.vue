@@ -11,8 +11,8 @@
         <div class="content">
           <h1 class="title">{{food.name}}</h1>
           <div class="detail">
-            <span class="sell-count">月售{{food.sellCount}}</span>
-            <span class="rating">好评率{{food.rating}}%</span>
+            <span class="sell-count">月售 {{food.sellCount}}</span>
+            <span class="rating">好评率 {{food.rating}}%</span>
           </div>
           <div class="price">
             <span class="now">￥{{food.price}}</span>
@@ -25,10 +25,22 @@
             <div class="buy" v-show="showBuy" @click="addFood">加入购物车</div>
           </transition>
         </div>
-        <split />
+        <split v-show="food.info"/>
         <div class="info" v-show="food.info">
           <h1 class="title">商品信息</h1>
           <p class="text">{{food.info}}</p>
+        </div>
+        <split />
+        <div class="rating">
+          <h1 class="title">商品评价</h1>
+          <ratingselect
+            :select-type="selectType"
+            :only-content="onlyContent"
+            :desc="desc"
+            :ratings="food.ratings"
+            @select="handleSelect"
+            @toggle="handleToggle"
+          />
         </div>
       </div>
     </div>
@@ -39,12 +51,17 @@
 import BScroll from 'better-scroll'
 import Cartcontrol from '@/components/cartcontrol/Cartcontrol'
 import Split from '@/components/split/Split'
+import Ratingselect from '@/components/ratingselect/Ratingselect'
+const ALL = 2
+// const POSITIVE = 0
+// const NEGATIVE = 1
 
 export default {
   name: 'Food',
   components: {
     Cartcontrol,
-    Split
+    Split,
+    Ratingselect
   },
   props: {
     food: {
@@ -53,7 +70,14 @@ export default {
   },
   data () {
     return {
-      showFlag: false
+      showFlag: false,
+      selectType: ALL,
+      onlyContent: true,
+      desc: {
+        all: '全局',
+        positive: '推荐',
+        negative: '吐槽'
+      }
     }
   },
   computed: {
@@ -64,6 +88,9 @@ export default {
   methods: {
     show () {
       this.showFlag = true
+      // 评价组件被多个商品使用,评价状态每次都要初始化
+      this.selectType = ALL
+      this.onlyContent = true
       this.$nextTick(() => {
         if (!this.scroll) {
           this.scroll = new BScroll(this.$refs.food, {
@@ -85,6 +112,12 @@ export default {
     // 把 cartcontrol 派发的事件转给父组件,用来触发动画
     transCartAdd () {
       this.$emit('cartAdd', event.target)
+    },
+    handleSelect (type) {
+      this.selectType = type
+    },
+    handleToggle () {
+      this.onlyContent = !this.onlyContent
     }
   }
 }
@@ -189,4 +222,11 @@ export default {
         padding 0 8px
         color rgb(77, 85, 93)
         font-size 12px
+    .rating
+      padding-top 18px
+      .title
+        line-height 14px
+        margin-left 18px
+        font-size 14px
+        color rgb(7, 17, 27)
 </style>
