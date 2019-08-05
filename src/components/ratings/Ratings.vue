@@ -1,5 +1,5 @@
 <template>
-  <div class="ratings">
+  <div class="ratings" ref="ratings">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">
@@ -24,12 +24,60 @@
           </div>
         </div>
       </div>
+      <split />
+      <ratingselect
+        :select-type="selectType"
+        :only-content="onlyContent"
+        :desc="desc"
+        :ratings="ratings"
+        @select="handleSelect"
+        @toggle="handleToggle"
+      />
+      <div class="rating-wrapper">
+        <ul>
+          <li
+            class="rating-item border-1px"
+            v-for="(rating, index) of ratings"
+            :key="index"
+            v-show="needShow(rating.rateType, rating.text)"
+          >
+            <div class="avatar">
+              <img :src="rating.avatar" alt="" class="a" width="28" height="28">
+            </div>
+            <div class="content">
+              <h1 class="name">{{rating.username}}</h1>
+              <div class="star-wrapper">
+                <star :size="24" :score="rating.score" />
+                <span class="delivery" v-show="rating.deliveryTime">{{rating.deliveryTime}}分钟送达</span>
+              </div>
+              <p class="text">{{rating.text}}</p>
+              <div class="recommend" v-show="rating.recommend && rating.recommend.length">
+                <span class="icon-thumb_up"></span>
+                <span class="item" v-for="(item, index) in rating.recommend" :key="index">{{item}}</span>
+              </div>
+              <div class="time">
+                {{rating.rateTime | formatDate}}
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import BScroll from 'better-scroll'
 import Star from '@/components/star/Star'
+import Split from '@/components/split/Split'
+import Ratingselect from '@/components/ratingselect/Ratingselect'
+import { formatDate } from '@/common/js/date'
+
+const STATUS_OK = 'OK'
+
+const ALL = 2
+// const POSITIVE = 0
+// const NEGATIVE = 1
 
 export default {
   name: 'Ratings',
@@ -39,23 +87,79 @@ export default {
     }
   },
   components: {
-    Star
+    Star,
+    Split,
+    Ratingselect
   },
   data () {
     return {
-
+      ratings: [],
+      // 默认选中全部,只看有内容评价
+      selectType: ALL,
+      onlyContent: true,
+      desc: {
+        all: '全部',
+        positive: '满意',
+        negative: '不满意'
+      }
+    }
+  },
+  methods: {
+    handleSelect (type) {
+      this.selectType = type
+      // this.$nextTick(() => {
+      //   // refresh 重新计算内容高度
+      //   this.scroll.refresh()
+      // })
+    },
+    handleToggle () {
+      this.onlyContent = !this.onlyContent
+    },
+    // 是否显示评论
+    needShow (type, text) {
+      if (this.onlyContent && !text) {
+        return false
+      }
+      if (this.selectType === ALL) {
+        return true
+      } else {
+        return type === this.selectType
+      }
+    }
+  },
+  created () {
+    this.axios.get('/api/ratings').then((res) => {
+      if (res.statusText === STATUS_OK) {
+        const result = res.data
+        this.ratings = result.data
+        this.$nextTick(() => {
+          this.scroll = new BScroll(this.$refs.ratings, {
+            click: true
+          })
+        })
+      } else {
+        console.log(res.statusText)
+      }
+    })
+  },
+  filters: {
+    formatDate (time) {
+      let date = new Date(time)
+      return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+  @import "~@/common/styles/mixin.styl"
   .ratings
     position absolute
     left 0
     top 174px
     bottom 0
     width 100%
+    overflow hidden
     .overview
       display flex
       padding 18px 0
@@ -117,4 +221,62 @@ export default {
             line-height 18px
             font-size 12px
             color rgb(147, 153, 159)
+    .rating-wrapper
+      padding 0 18px
+      .rating-item
+        display flex
+        padding 18px 0
+        border-1px(rgba(7, 17, 27, 0.1))
+        .avatar
+          flex 0 0 28px
+          width 28px
+          margin-right 12px
+          img
+            border-radius 50%
+        .content
+          position relative
+          flex 1
+          .name
+            margin-bottom 4px
+            line-height 12px
+            font-size 10px
+            color rgb(7, 17, 27)
+          .star-wrapper
+            margin-bottom 6px
+            font-size 0
+            .star
+              display inline-block
+              margin-right 6px
+              vertical-align top
+            .delivery
+              display inline-block
+              vertical-align top
+              line-height 12px
+              font-size 10px
+              color rgb(147, 153, 159)
+        .text
+          margin-bottom 8px
+          font-size 12px
+          line-height 18px
+          color rgb(7, 17, 27)
+        .recommend
+          line-height 16px
+          font-size 0
+          .icon-thumb_up, .item
+            display inline-block
+            margin 0 8px 4px 0
+            font-size 12px
+          .icon-thumb_up
+            color rgb(0, 160, 220)
+          .item
+            padding 0 6px
+            border 1px solid rgba(7, 17, 27, 0.1)
+            background-color: #fff
+        .time
+          position absolute
+          top 0
+          right 0
+          line-height 12px
+          font-size 10px
+          color rgb(147, 153, 159)
 </style>

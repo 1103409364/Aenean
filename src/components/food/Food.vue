@@ -95,7 +95,7 @@ export default {
       selectType: ALL,
       onlyContent: true,
       desc: {
-        all: '全局',
+        all: '全部',
         positive: '推荐',
         negative: '吐槽'
       }
