@@ -7,6 +7,7 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+// webpack 插件,提取 css 为单独的文件
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
@@ -21,7 +22,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       usePostCSS: true
     })
   },
-  devtool: config.build.productionSourceMap ? config.build.devtool : false,
+  devtool: config.build.productionSourceMap ? config.build.devtool : false, //SourceMap
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
@@ -32,6 +33,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    // 压缩 js 代码
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {
@@ -64,7 +66,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       filename: config.build.index,
       template: 'index.html',
       inject: true,
-      minify: {
+      minify: { //压缩 HTML
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
@@ -79,6 +81,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // enable scope hoisting
     new webpack.optimize.ModuleConcatenationPlugin(),
     // split vendor js into its own file
+    // 三方库打包为 vender
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
       minChunks (module) {
