@@ -28,10 +28,10 @@ export default {
   .icon
     display inline-block
     vertical-align top
-    // width 12px
-    // height 12px
+    width 12px
+    height 12px
     // 背景图片根据后端返回的数据决定
-    // background-size 12px 12px
+    background-size 12px 12px
     background-repeat no-repeat
     &.decrease_1
       bg-image('decrease_1')

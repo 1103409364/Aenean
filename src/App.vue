@@ -12,6 +12,7 @@
 
 <script>
 import Header from '@/components/header/Header'
+import { urlParse } from '@/common/js/util'
 // 状态码常量
 const STATUS_OK = 'OK'
 
@@ -19,18 +20,26 @@ export default {
   name: 'App',
   data () {
     return {
-      seller: {}
+      seller: {
+        // 从 url 中拿到商家的 id
+        id: (() => {
+          let queryParam = urlParse()
+          return queryParam.id
+        })()
+      }
     }
   },
   components: {
     'v-header': Header
   },
   created () {
-    this.axios.get('/api/seller').then((res) => {
+    this.axios.get('/api/seller?id=' + this.seller.id).then((res) => {
       if (res.statusText === STATUS_OK) {
         const result = res.data
         // console.log(result.data)
-        this.seller = result.data
+        // this.seller = result.data
+        // 给对象添加 Ajax 请求返回的属性
+        this.seller = Object.assign({}, this.seller, result.data)
       }
     })
   }
