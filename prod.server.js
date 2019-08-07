@@ -1,54 +1,54 @@
-var express = require('express');
-var config = require('./config/index');
+var express = require('express')
+var config = require('./config/index')
 // 当前环境变量或者 config 中读取 port
-var port = process.env.PORT || config.build.port;
+var port = process.env.PORT || config.build.port
 
-var app = express();
+var app = express()
 
-var router = express.Router();
+var router = express.Router()
 router.get('/', function (req, res, next) {
-	req.url = '/index.html';
-	next();
-});
+  req.url = '/index.html'
+  next()
+})
 
-app.use(router);
+app.use(router)
 
-var appData = require('./mock/data.json');
-var seller = appData.seller;
-var goods = appData.goods;
-var ratings = appData.ratings;
+var appData = require('./mock/data.json')
+var seller = appData.seller
+var goods = appData.goods
+var ratings = appData.ratings
 
-var apiRoutes = express.Router();
+var apiRoutes = express.Router()
 
 apiRoutes.get('/seller', function (req, res) {
-	res.json({
-		errno: 0,
-		data: seller
-	});
-});
+  res.json({
+    errno: 0,
+    data: seller
+  })
+})
 
 apiRoutes.get('/goods', function (req, res) {
-	res.json({
-		errno: 0,
-		data: goods
-	});
-});
+  res.json({
+    errno: 0,
+    data: goods
+  })
+})
 
 apiRoutes.get('/ratings', function (req, res) {
-	res.json({
-		errno: 0,
-		data: ratings
-	});
-}); 
+  res.json({
+    errno: 0,
+    data: ratings
+  })
+})
 
-app.use('/api', apiRoutes);
+app.use('/api', apiRoutes)
 
-app.use(express.static('./dist'));
+app.use(express.static('./dist'))
 
 module.exports = app.listen(port, function (err) {
-	if (err) {
-		console.log(err);
-		return
-	}
-	console.log('Listening at http://localhost:' + port + '\n')
-});
+  if (err) {
+    console.log(err)
+    return
+  }
+  console.log('Listening at http://localhost:' + port + '\n')
+})
