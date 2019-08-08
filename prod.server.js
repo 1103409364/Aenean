@@ -1,49 +1,40 @@
-var express = require('express')
-var config = require('./config/index')
-// 当前环境变量或者 config 中读取 port
-var port = process.env.PORT || config.build.port
+const express = require('express')
 
-var app = express()
+const app = express()
 
-var router = express.Router()
-router.get('/', function (req, res, next) {
-  req.url = '/index.html'
-  next()
-})
+const appData = require('./data.json')
+const seller = appData.seller
+const goods = appData.goods
+const ratings = appData.ratings
 
-app.use(router)
+const router = express.Router()
 
-var appData = require('./mock/data.json')
-var seller = appData.seller
-var goods = appData.goods
-var ratings = appData.ratings
-
-var apiRoutes = express.Router()
-
-apiRoutes.get('/seller', function (req, res) {
+router.get('/seller', function (req, res) {
   res.json({
     errno: 0,
     data: seller
   })
 })
 
-apiRoutes.get('/goods', function (req, res) {
+router.get('/goods', function (req, res) {
   res.json({
     errno: 0,
     data: goods
   })
 })
 
-apiRoutes.get('/ratings', function (req, res) {
+router.get('/ratings', function (req, res) {
   res.json({
     errno: 0,
     data: ratings
   })
 })
 
-app.use('/api', apiRoutes)
+app.use('/api', router)
 
 app.use(express.static('./dist'))
+
+const port = process.env.PORT || 8900
 
 module.exports = app.listen(port, function (err) {
   if (err) {
