@@ -29,61 +29,61 @@
 </template>
 
 <script>
-  export default {
-    name: 'tab',
-    props: {
-      tabs: {
-        type: Array,
-        default() {
-          return []
-        }
+export default {
+  name: 'tab',
+  props: {
+    tabs: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    initialIndex: {
+      type: Number,
+      default: 0
+    }
+  },
+  data () {
+    return {
+      index: this.initialIndex,
+      slideOptions: {
+        listenScroll: true,
+        probeType: 3,
+        directionLockThreshold: 0
+      }
+    }
+  },
+  computed: {
+    selectedLabel: {
+      get () {
+        return this.tabs[this.index].label
       },
-      initialIndex: {
-        type: Number,
-        default: 0
+      set (newVal) {
+        this.index = this.tabs.findIndex((value) => {
+          return value.label === newVal
+        })
       }
+    }
+  },
+  mounted () {
+    this.onChange(this.index)
+  },
+  methods: {
+    onScroll (pos) {
+      const tabBarWidth = this.$refs.tabBar.$el.clientWidth
+      const slideWidth = this.$refs.slide.slide.scrollerWidth
+      const transform = -pos.x / slideWidth * tabBarWidth
+      this.$refs.tabBar.setSliderTransform(transform)
     },
-    data() {
-      return {
-        index: this.initialIndex,
-        slideOptions: {
-          listenScroll: true,
-          probeType: 3,
-          directionLockThreshold: 0
-        }
-      }
-    },
-    computed: {
-      selectedLabel: {
-        get() {
-          return this.tabs[this.index].label
-        },
-        set(newVal) {
-          this.index = this.tabs.findIndex((value) => {
-            return value.label === newVal
-          })
-        }
-      }
-    },
-    mounted() {
-      this.onChange(this.index)
-    },
-    methods: {
-      onScroll(pos) {
-        const tabBarWidth = this.$refs.tabBar.$el.clientWidth
-        const slideWidth = this.$refs.slide.slide.scrollerWidth
-        const transform = -pos.x / slideWidth * tabBarWidth
-        this.$refs.tabBar.setSliderTransform(transform)
-      },
-      onChange(current) {
-        this.index = current
-        const instance = this.$refs.component[current]
-        if (instance && instance.fetch) {
-          instance.fetch()
-        }
+    onChange (current) {
+      this.index = current
+      const instance = this.$refs.component[current]
+      if (instance && instance.fetch) {
+        instance.fetch()
       }
     }
   }
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -13,47 +13,47 @@
 </template>
 
 <script>
-  import ShopCart from 'components/shop-cart/shop-cart'
-  import popupMixin from 'common/mixins/popup'
+import ShopCart from 'components/shop-cart/shop-cart'
+import popupMixin from 'common/mixins/popup'
 
-  export default {
-    name: 'shop-cart-sticky',
-    mixins: [popupMixin],
-    props: {
-      selectFoods: {
-        type: Array,
-        default() {
-          return []
-        }
-      },
-      deliveryPrice: {
-        type: Number,
-        default: 0
-      },
-      minPrice: {
-        type: Number,
-        default: 0
-      },
-      fold: {
-        type: Boolean,
-        default: true
-      },
-      list: {
-        type: Object,
-        default() {
-          return {}
-        }
+export default {
+  name: 'shop-cart-sticky',
+  mixins: [popupMixin],
+  props: {
+    selectFoods: {
+      type: Array,
+      default () {
+        return []
       }
     },
-    methods: {
-      drop(el) {
-        this.$refs.shopCart.drop(el)
-      }
+    deliveryPrice: {
+      type: Number,
+      default: 0
     },
-    components: {
-      ShopCart
+    minPrice: {
+      type: Number,
+      default: 0
+    },
+    fold: {
+      type: Boolean,
+      default: true
+    },
+    list: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
+  },
+  methods: {
+    drop (el) {
+      this.$refs.shopCart.drop(el)
+    }
+  },
+  components: {
+    ShopCart
   }
+}
 </script>
 
 <style lang="stylus" scoped>

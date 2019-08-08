@@ -42,61 +42,61 @@
 </template>
 
 <script>
-  import CartControl from 'components/cart-control/cart-control'
-  import popupMixin from 'common/mixins/popup'
+import CartControl from 'components/cart-control/cart-control'
+import popupMixin from 'common/mixins/popup'
 
-  const EVENT_SHOW = 'show'
-  const EVENT_ADD = 'add'
-  const EVENT_LEAVE = 'leave'
+const EVENT_SHOW = 'show'
+const EVENT_ADD = 'add'
+const EVENT_LEAVE = 'leave'
 
-  export default {
-    name: 'shop-cart-list',
-    mixins: [popupMixin],
-    props: {
-      selectFoods: {
-        type: Array,
-        default() {
-          return []
-        }
+export default {
+  name: 'shop-cart-list',
+  mixins: [popupMixin],
+  props: {
+    selectFoods: {
+      type: Array,
+      default () {
+        return []
       }
-    },
-    created() {
-      this.$on(EVENT_SHOW, () => {
-        this.$nextTick(() => {
-          this.$refs.listContent.refresh()
-        })
-      })
-    },
-    methods: {
-      onAdd(target) {
-        this.$emit(EVENT_ADD, target)
-      },
-      afterLeave() {
-        this.$emit(EVENT_LEAVE)
-      },
-      maskClick() {
-        this.hide()
-      },
-      empty() {
-        this.dialogComp = this.$createDialog({
-          type: 'confirm',
-          content: '清空购物车？',
-          $events: {
-            confirm: () => {
-              this.selectFoods.forEach((food) => {
-                food.count = 0
-              })
-              this.hide()
-            }
-          }
-        })
-        this.dialogComp.show()
-      }
-    },
-    components: {
-      CartControl
     }
+  },
+  created () {
+    this.$on(EVENT_SHOW, () => {
+      this.$nextTick(() => {
+        this.$refs.listContent.refresh()
+      })
+    })
+  },
+  methods: {
+    onAdd (target) {
+      this.$emit(EVENT_ADD, target)
+    },
+    afterLeave () {
+      this.$emit(EVENT_LEAVE)
+    },
+    maskClick () {
+      this.hide()
+    },
+    empty () {
+      this.dialogComp = this.$createDialog({
+        type: 'confirm',
+        content: '清空购物车？',
+        $events: {
+          confirm: () => {
+            this.selectFoods.forEach((food) => {
+              food.count = 0
+            })
+            this.hide()
+          }
+        }
+      })
+      this.dialogComp.show()
+    }
+  },
+  components: {
+    CartControl
   }
+}
 </script>
 
 <style lang="stylus" scoped>

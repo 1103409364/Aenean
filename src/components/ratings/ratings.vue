@@ -72,63 +72,63 @@
 </template>
 
 <script>
-  import Star from 'components/star/star'
-  import RatingSelect from 'components/rating-select/rating-select'
-  import Split from 'components/split/split'
-  import ratingMixin from 'common/mixins/rating'
-  import { getRatings } from 'api'
-  import moment from 'moment'
+import Star from 'components/star/star'
+import RatingSelect from 'components/rating-select/rating-select'
+import Split from 'components/split/split'
+import ratingMixin from 'common/mixins/rating'
+import { getRatings } from 'api'
+import moment from 'moment'
 
-  export default {
-    name: 'ratings',
-    mixins: [ratingMixin],
-    props: {
-      data: {
-        type: Object
-      }
-    },
-    data () {
-      return {
-        ratings: [],
-        scrollOptions: {
-          click: false,
-          directionLockThreshold: 0
-        }
-      }
-    },
-    computed: {
-      seller () {
-        return this.data.seller || {}
-      }
-    },
-    methods: {
-      fetch () {
-        if (!this.fetched) {
-          this.fetched = true
-          getRatings({
-            id: this.seller.id
-          }).then((ratings) => {
-            this.ratings = ratings
-          })
-        }
-      },
-      format (time) {
-        return moment(time).format('YYYY-MM-DD hh:mm')
-      }
-    },
-    components: {
-      Star,
-      Split,
-      RatingSelect
-    },
-    watch: {
-      selectType () {
-        this.$nextTick(() => {
-          this.$refs.scroll.refresh()
-        })
+export default {
+  name: 'ratings',
+  mixins: [ratingMixin],
+  props: {
+    data: {
+      type: Object
+    }
+  },
+  data () {
+    return {
+      ratings: [],
+      scrollOptions: {
+        click: false,
+        directionLockThreshold: 0
       }
     }
+  },
+  computed: {
+    seller () {
+      return this.data.seller || {}
+    }
+  },
+  methods: {
+    fetch () {
+      if (!this.fetched) {
+        this.fetched = true
+        getRatings({
+          id: this.seller.id
+        }).then((ratings) => {
+          this.ratings = ratings
+        })
+      }
+    },
+    format (time) {
+      return moment(time).format('YYYY-MM-DD hh:mm')
+    }
+  },
+  components: {
+    Star,
+    Split,
+    RatingSelect
+  },
+  watch: {
+    selectType () {
+      this.$nextTick(() => {
+        this.$refs.scroll.refresh()
+      })
+    }
   }
+}
 </script>
 
 <style lang="stylus" scoped>

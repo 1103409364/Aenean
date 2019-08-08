@@ -75,123 +75,123 @@
 </template>
 
 <script>
-  import { getGoods } from 'api'
-  import CartControl from 'components/cart-control/cart-control'
-  import ShopCart from 'components/shop-cart/shop-cart'
-  import Food from 'components/food/food'
-  import SupportIco from 'components/support-ico/support-ico'
-  import Bubble from 'components/bubble/bubble'
+import { getGoods } from 'api'
+import CartControl from 'components/cart-control/cart-control'
+import ShopCart from 'components/shop-cart/shop-cart'
+import Food from 'components/food/food'
+import SupportIco from 'components/support-ico/support-ico'
+import Bubble from 'components/bubble/bubble'
 
-  export default {
-    name: 'goods',
-    props: {
-      data: {
-        type: Object,
-        default() {
-          return {}
-        }
+export default {
+  name: 'goods',
+  props: {
+    data: {
+      type: Object,
+      default () {
+        return {}
       }
-    },
-    data() {
-      return {
-        goods: [],
-        selectedFood: {},
-        scrollOptions: {
-          click: false,
-          directionLockThreshold: 0
-        }
-      }
-    },
-    computed: {
-      seller() {
-        return this.data.seller
-      },
-      selectFoods() {
-        let foods = []
-        this.goods.forEach((good) => {
-          good.foods.forEach((food) => {
-            if (food.count) {
-              foods.push(food)
-            }
-          })
-        })
-        return foods
-      },
-      barTxts() {
-        let ret = []
-        this.goods.forEach((good) => {
-          const { type, name, foods } = good
-          let count = 0
-          foods.forEach((food) => {
-            count += food.count || 0
-          })
-          ret.push({
-            type,
-            name,
-            count
-          })
-        })
-        return ret
-      }
-    },
-    methods: {
-      fetch() {
-        if (!this.fetched) {
-          this.fetched = true
-          getGoods({
-            id: this.seller.id
-          }).then((goods) => {
-            this.goods = goods
-          })
-        }
-      },
-      selectFood(food) {
-        this.selectedFood = food
-        this._showFood()
-        this._showShopCartSticky()
-      },
-      onAdd(target) {
-        this.$refs.shopCart.drop(target)
-      },
-      _showFood() {
-        this.foodComp = this.foodComp || this.$createFood({
-          $props: {
-            food: 'selectedFood'
-          },
-          $events: {
-            add: (target) => {
-              this.shopCartStickyComp.drop(target)
-            },
-            leave: () => {
-              this._hideShopCartSticky()
-            }
-          }
-        })
-        this.foodComp.show()
-      },
-      _showShopCartSticky() {
-        this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
-          $props: {
-            selectFoods: 'selectFoods',
-            deliveryPrice: this.seller.deliveryPrice,
-            minPrice: this.seller.minPrice,
-            fold: true
-          }
-        })
-        this.shopCartStickyComp.show()
-      },
-      _hideShopCartSticky() {
-        this.shopCartStickyComp.hide()
-      }
-    },
-    components: {
-      Bubble,
-      SupportIco,
-      CartControl,
-      ShopCart,
-      Food
     }
+  },
+  data () {
+    return {
+      goods: [],
+      selectedFood: {},
+      scrollOptions: {
+        click: false,
+        directionLockThreshold: 0
+      }
+    }
+  },
+  computed: {
+    seller () {
+      return this.data.seller
+    },
+    selectFoods () {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
+    },
+    barTxts () {
+      let ret = []
+      this.goods.forEach((good) => {
+        const { type, name, foods } = good
+        let count = 0
+        foods.forEach((food) => {
+          count += food.count || 0
+        })
+        ret.push({
+          type,
+          name,
+          count
+        })
+      })
+      return ret
+    }
+  },
+  methods: {
+    fetch () {
+      if (!this.fetched) {
+        this.fetched = true
+        getGoods({
+          id: this.seller.id
+        }).then((goods) => {
+          this.goods = goods
+        })
+      }
+    },
+    selectFood (food) {
+      this.selectedFood = food
+      this._showFood()
+      this._showShopCartSticky()
+    },
+    onAdd (target) {
+      this.$refs.shopCart.drop(target)
+    },
+    _showFood () {
+      this.foodComp = this.foodComp || this.$createFood({
+        $props: {
+          food: 'selectedFood'
+        },
+        $events: {
+          add: (target) => {
+            this.shopCartStickyComp.drop(target)
+          },
+          leave: () => {
+            this._hideShopCartSticky()
+          }
+        }
+      })
+      this.foodComp.show()
+    },
+    _showShopCartSticky () {
+      this.shopCartStickyComp = this.shopCartStickyComp || this.$createShopCartSticky({
+        $props: {
+          selectFoods: 'selectFoods',
+          deliveryPrice: this.seller.deliveryPrice,
+          minPrice: this.seller.minPrice,
+          fold: true
+        }
+      })
+      this.shopCartStickyComp.show()
+    },
+    _hideShopCartSticky () {
+      this.shopCartStickyComp.hide()
+    }
+  },
+  components: {
+    Bubble,
+    SupportIco,
+    CartControl,
+    ShopCart,
+    Food
   }
+}
 </script>
 
 <style lang="stylus" scoped>

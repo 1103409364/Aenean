@@ -82,57 +82,57 @@
 </template>
 
 <script>
-  import { saveToLocal, loadFromLocal } from 'common/js/storage'
-  import Star from 'components/star/star'
-  import Split from 'components/split/split'
-  import SupportIco from 'components/support-ico/support-ico'
+import { saveToLocal, loadFromLocal } from 'common/js/storage'
+import Star from 'components/star/star'
+import Split from 'components/split/split'
+import SupportIco from 'components/support-ico/support-ico'
 
-  export default {
-    props: {
-      data: {
-        type: Object,
-        default() {
-          return {}
-        }
+export default {
+  props: {
+    data: {
+      type: Object,
+      default () {
+        return {}
       }
-    },
-    data() {
-      return {
-        favorite: false,
-        sellerScrollOptions: {
-          directionLockThreshold: 0,
-          click: false
-        },
-        picScrollOptions: {
-          scrollX: true,
-          stopPropagation: true,
-          directionLockThreshold: 0
-        }
-      }
-    },
-    computed: {
-      seller() {
-        return this.data.seller || {}
-      },
-      favoriteText() {
-        return this.favorite ? '已收藏' : '收藏'
-      }
-    },
-    created() {
-      this.favorite = loadFromLocal(this.seller.id, 'favorite', false)
-    },
-    methods: {
-      toggleFavorite() {
-        this.favorite = !this.favorite
-        saveToLocal(this.seller.id, 'favorite', this.favorite)
-      }
-    },
-    components: {
-      SupportIco,
-      Star,
-      Split
     }
+  },
+  data () {
+    return {
+      favorite: false,
+      sellerScrollOptions: {
+        directionLockThreshold: 0,
+        click: false
+      },
+      picScrollOptions: {
+        scrollX: true,
+        stopPropagation: true,
+        directionLockThreshold: 0
+      }
+    }
+  },
+  computed: {
+    seller () {
+      return this.data.seller || {}
+    },
+    favoriteText () {
+      return this.favorite ? '已收藏' : '收藏'
+    }
+  },
+  created () {
+    this.favorite = loadFromLocal(this.seller.id, 'favorite', false)
+  },
+  methods: {
+    toggleFavorite () {
+      this.favorite = !this.favorite
+      saveToLocal(this.seller.id, 'favorite', this.favorite)
+    }
+  },
+  components: {
+    SupportIco,
+    Star,
+    Split
   }
+}
 </script>
 
 <style lang="stylus" scoped>

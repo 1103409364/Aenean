@@ -33,32 +33,32 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import SupportIco from 'components/support-ico/support-ico'
+import SupportIco from 'components/support-ico/support-ico'
 
-  export default {
-    name: 'v-header',
-    props: {
-      seller: {
-        type: Object,
-        default() {
-          return {}
-        }
+export default {
+  name: 'v-header',
+  props: {
+    seller: {
+      type: Object,
+      default () {
+        return {}
       }
-    },
-    methods: {
-      showDetail() {
-        this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
-          $props: {
-            seller: 'seller'
-          }
-        })
-        this.headerDetailComp.show()
-      }
-    },
-    components: {
-      SupportIco
     }
+  },
+  methods: {
+    showDetail () {
+      this.headerDetailComp = this.headerDetailComp || this.$createHeaderDetail({
+        $props: {
+          seller: 'seller'
+        }
+      })
+      this.headerDetailComp.show()
+    }
+  },
+  components: {
+    SupportIco
   }
+}
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">

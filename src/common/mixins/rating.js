@@ -1,14 +1,14 @@
 const ALL = 2
 
 export default {
-  data() {
+  data () {
     return {
       selectType: ALL,
       onlyContent: true
     }
   },
   computed: {
-    computedRatings() {
+    computedRatings () {
       let ret = []
       this.ratings.forEach((rating) => {
         if (this.onlyContent && !rating.text) {
@@ -22,10 +22,10 @@ export default {
     }
   },
   methods: {
-    onSelect(type) {
+    onSelect (type) {
       this.selectType = type
     },
-    onToggle() {
+    onToggle () {
       this.onlyContent = !this.onlyContent
     }
   }

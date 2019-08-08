@@ -36,26 +36,26 @@
 </template>
 
 <script>
-  import popupMixin from 'common/mixins/popup'
-  import Star from 'components/star/star'
-  import SupportIco from 'components/support-ico/support-ico'
+import popupMixin from 'common/mixins/popup'
+import Star from 'components/star/star'
+import SupportIco from 'components/support-ico/support-ico'
 
-  export default {
-    name: 'header-detail',
-    mixins: [popupMixin],
-    props: {
-      seller: {
-        type: Object,
-        default() {
-          return {}
-        }
+export default {
+  name: 'header-detail',
+  mixins: [popupMixin],
+  props: {
+    seller: {
+      type: Object,
+      default () {
+        return {}
       }
-    },
-    components: {
-      SupportIco,
-      Star
     }
+  },
+  components: {
+    SupportIco,
+    Star
   }
+}
 </script>
 
 <style lang="stylus" scoped>
