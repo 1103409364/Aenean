@@ -5,7 +5,7 @@ const seller = appData.seller
 const goods = appData.goods
 const ratings = appData.ratings
 
-function resolve(dir) {
+function resolve (dir) {
   return path.join(__dirname, dir)
 }
 
@@ -27,7 +27,7 @@ module.exports = {
     }
   },
   devServer: {
-    before(app) {
+    before (app) {
       app.get('/api/seller', function (req, res) {
         res.json({
           errno: 0,
@@ -48,7 +48,7 @@ module.exports = {
       })
     }
   },
-  chainWebpack(config) {
+  chainWebpack (config) {
     config.resolve.alias
       .set('components', resolve('src/components'))
       .set('common', resolve('src/common'))
