@@ -27,7 +27,7 @@
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
-      <img :src="seller.avatar" width="100%" height="100%">
+      <img :src="seller.avatar" width="100%">
     </div>
   </div>
 </template>
@@ -157,8 +157,9 @@ export default {
         font-size: $fontsize-small-s
     .background
       position: absolute
-      top: 0
       left: 0
+      top: -50%
+      transform  translate3d(0, -50%, 0)
       width: 100%
       height: 100%
       z-index: -1
